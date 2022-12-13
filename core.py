@@ -15,6 +15,10 @@ class AutoInput:
     def set_velocity(cls, velocity):
         cls._velocity = velocity
 
+    @classmethod
+    def set_interval(cls, interval):
+        cls._sleep_interval = interval
+
     def _duration(self, x_coord: int, y_coord: int) -> int:
         pos = pag.position()
         current_x, current_y = pos.x, pos.y
