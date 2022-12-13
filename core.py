@@ -79,6 +79,7 @@ class AutoInput:
         for _ in range(count):
             pag.scroll(clicks)
             self.sleep(interval)
+        self.sleep(self._sleep_interval - interval)
         return self
     
     def press(self, key:str|List[str], count:int=1, interval:float=0.1):
