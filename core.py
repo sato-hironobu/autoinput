@@ -19,31 +19,33 @@ class AutoInput:
     def set_interval(cls, interval):
         cls._sleep_interval = interval
 
-    def _duration(self, x_coord: int, y_coord: int) -> int:
+    def _duration(self, x_coord:int, y_coord:int) -> float:
         pos = pag.position()
         current_x, current_y = pos.x, pos.y
         distance = math.sqrt((x_coord - current_x) ** 2 + (y_coord - current_y) ** 2)
         duration = distance / self._velocity
         return duration
 
-    def move_to(self, x_coord: int, y_coord: int, duration: float = 1, auto_calc_duration: bool =True, tween=pag.easeInOutQuad):
-        if auto_calc_duration:
+    def move_to(self, x_coord:int, y_coord:int, duration:float=None, tween=pag.easeInOutQuad):
+        if duration == None:
             duration = self._duration(x_coord, y_coord)
         pag.moveTo(x_coord, y_coord, duration=duration, tween=tween)
         self.sleep(self._sleep_interval) 
         return self
     
-    def click(self, x_coord: int, y_coord: int, tween=pag.easeInOutQuad):
+    def click(self, x_coord:int, y_coord:int, tween=pag.easeInOutQuad):
         duration = self._duration(x_coord, y_coord)
         pag.click(x_coord, y_coord, duration=duration, tween=tween,)
         self.sleep(self._sleep_interval) 
         return self
     
-    def sleep(self, sleep_time: float):
+    def sleep(self, sleep_time:float=None):
+        if sleep_time == None:
+            sleep_time = self._sleep_interval
         time.sleep(sleep_time)
         return self
 
-    def send_keys(self, string: str, interval: float = 0.1):
+    def send_keys(self, string:str, interval:float=0.1):
         pag.typewrite(string, interval=interval)
         self.sleep(self._sleep_interval) 
         return self
@@ -58,35 +60,35 @@ class AutoInput:
         self.sleep(self._sleep_interval) 
         return self
     
-    def enter(self, count: int = 1):
+    def enter(self, count:int=1):
         self.press("enter", count)
         self.sleep(self._sleep_interval) 
         return self
     
-    def down(self, count: int = 1):
+    def down(self, count:int=1):
         self.press("down", count)
         self.sleep(self._sleep_interval) 
         return self
 
-    def tab(self, count: int = 1):
+    def tab(self, count:int=1):
         self.press("tab", count)
         self.sleep(self._sleep_interval) 
         return self
 
-    def scroll(self, clicks: int, count: int = 1, interval: float = 0.25):
+    def scroll(self, clicks:int, count:int=1, interval:float=0.25):
         for _ in range(count):
             pag.scroll(clicks)
             self.sleep(interval)
         return self
     
-    def press(self, key: str | List[str], count: int = 1, interval: float = 0.1):
+    def press(self, key:str|List[str], count:int=1, interval:float=0.1):
         for i in range(count):
             pag.press(key)
             self.sleep(interval)
         self.sleep(self._sleep_interval - interval)
         return self
  
-    def drag(self, coord_from: Tuple[int, int], coord_to: Tuple[int, int]):
+    def drag(self, coord_from:Tuple[int,int], coord_to:Tuple[int, int]):
         self.move_to(*coord_from, duration=self._duration(*coord_from), tween=pag.easeInOutQuad)
         pag.mouseDown(*coord_from)
         self.move_to(*coord_to, duration=self._duration(*coord_from), tween=pag.easeInOutQuad)
@@ -94,7 +96,7 @@ class AutoInput:
         self.sleep(self._sleep_interval) 
         return self
 
-    def hotkey(self, *keys: str):
+    def hotkey(self, *keys:str):
         """
         Caution:
                 self.hotkey("shift", "alt", "down")
